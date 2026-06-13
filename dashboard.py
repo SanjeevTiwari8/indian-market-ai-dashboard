@@ -157,22 +157,38 @@ with btn_col2:
         st.session_state.zoom_days = min(90, st.session_state.zoom_days + 5)
         
 with reset_col:
+    # --- MIDDLE ROW: THE CANDLESTICK ENGINE WITH STEPPED ZOOM CONTROL INTERFACE ---
+st.subheader("📈 Modules 1 & 4: Live Candlestick Matrices (With Active S&R Boundaries)")
+
+# Dynamic UI Action Bar for layout manipulation parameters
+z_space, btn_col1, btn_col2, reset_col = st.columns([8, 1, 1, 1])
+
+with btn_col1:
+    if st.button("➕ Zoom In (Fewer Candles)", use_container_width=True):
+        st.session_state.zoom_days = max(5, st.session_state.zoom_days - 5)
+
+with btn_col2:
+    if st.button("➖ Zoom Out (More Candles)", use_container_width=True):
+        st.session_state.zoom_days = min(90, st.session_state.zoom_days + 5)
+        
+with reset_col:
     if st.button("🔄 Reset View", use_container_width=True):
         st.session_state.zoom_days = 30
 
 chart_tab1, chart_tab2, chart_tab3 = st.tabs(["NIFTY 50 Engine", "BANK NIFTY Engine", "MIDCAP NIFTY Engine"])
 
+# ADDED UNIQUE KEYS HERE TO REPAIR DUPLICATE ID CRASHES
 with chart_tab1:
     fig_nifty = engine.generate_interactive_candlestick("NIFTY 50", st.session_state.zoom_days)
-    st.plotly_chart(fig_nifty, use_container_width=True)
+    st.plotly_chart(fig_nifty, use_container_width=True, key="nifty_live_chart")
 
 with chart_tab2:
     fig_bank = engine.generate_interactive_candlestick("BANK NIFTY", st.session_state.zoom_days)
-    st.plotly_chart(fig_bank, use_container_width=True)
+    st.plotly_chart(fig_bank, use_container_width=True, key="bank_live_chart")
 
 with chart_tab3:
     fig_mid = engine.generate_interactive_candlestick("MIDCAP NIFTY", st.session_state.zoom_days)
-    st.plotly_chart(fig_mid, use_container_width=True)
+    st.plotly_chart(fig_mid, use_container_width=True, key="midcap_live_chart")
 
 st.markdown("---")
 
